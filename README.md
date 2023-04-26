@@ -1,5 +1,35 @@
 # Awesome store
 
+## API-first approach
+
+Awesome store chooses [API First approach](https://swagger.io/resources/articles/adopting-an-api-first-approach/) using [Open API 3.0](https://swagger.io/specification/) and [Open API Maven Generator](https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator-maven-plugin) to boost API development and allow foreseeing how the product looks like. The generated code can be overriden via [Mustache templates](https://mustache.github.io/mustache.5.html) such as [data transfer object](https://github.com/emeraldhieu/vinci/blob/master/order/src/main/resources/templates/pojo.mustache). The REST API can be viewed via [Swagger UI](http://localhost:50001/swagger-ui/index.html).
+
+## Message queue
+
+Whenever a product is created, a message is sent to Kafka for other services to consume. This way other services will be notified of the newly created product.
+
+## Schema registry
+
+As Product's Kafka messages tend to evolve by development's needs, [Confluent Avro](https://docs.confluent.io/2.0.0/schema-registry/docs/intro.html) is used to version schemas of Kafka messages. Schemas are stored in Kafka's log files and indices are stored in Avro's in-memory storage. For example, OrderMessage's schema:
+```
+{
+    "type": "record",
+    "name": "ProductMessage",
+    "namespace": "com.emeraldhieu.awesomestore.product",
+    "fields":
+    [
+        {
+            "name": "productId",
+            "type": "string"
+        }
+    ]
+}
+```
+
+## Database schema change management
+
+[Liquibase](https://docs.liquibase.com/tools-integrations/springboot/springboot.html) supports revisioning, deploying and rolling back database changes. On top of that, it allows [initializing data from CSV](https://docs.liquibase.com/change-types/load-data.html) for demonstrative purpose.
+
 ## Product API
 
 ### 1) List products
