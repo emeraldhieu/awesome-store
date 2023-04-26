@@ -1,0 +1,96 @@
+databaseChangeLog:
+  - changeSet:
+      id: createOrderTable
+      author: emeraldhieu
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: product
+      changes:
+        - createTable:
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: external_id
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_by
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: initializeOrderTable
+      author: emeraldhieu
+      preConditions:
+        - rowCount:
+            tableName: product
+            expectedRows: 0
+      changes:
+        - loadData:
+            tableName: product
+            columns:
+              - column:
+                  header: External ID
+                  name: external_id
+                  type: string
+              - column:
+                  header:  Name
+                  name:  name
+                  type:  string
+              - column:
+                  header:  Price
+                  name:  price
+                  type:  double
+              - column:
+                  header:  Created by
+                  name:  created_by
+                  type:  varchar(32)
+              - column:
+                  header:  Created at
+                  name:  created_at
+                  type:  timestamp
+              - column:
+                  header:  Updated by
+                  name:  updated_by
+                  type:  varchar(32)
+              - column:
+                  header:  Updated at
+                  name:  updated_at
+                  type:  timestamp
+            encoding:  UTF-8
+            file:  liquibase/data/products.csv

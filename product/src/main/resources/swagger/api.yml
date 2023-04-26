@@ -1,0 +1,180 @@
+openapi: 3.0.3
+info:
+  title: Product - OpenAPI 3.0
+  description: Product API that manages shopping products.
+  version: 1.0.11
+servers:
+  - url: http://localhost:50001
+tags:
+  - name: Products
+    description: Everything about product
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Get a list of products
+      description: Get a list of products
+      operationId: listProducts
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: sortOrders
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+            default: ["updatedAt,desc"]
+            example: ["createdAt,asc", "updatedAt,desc"]
+      responses:
+        '200':
+          description: Products listed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponseList'
+    post:
+      tags:
+        - Products
+      summary: Create a new product
+      description: POST /products
+      operationId: createProduct
+      requestBody:
+        description: Create a new product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+  /products/{id}:
+    patch:
+      tags:
+        - Products
+      summary: Update an existing product
+      description: Update an existing product by ID
+      operationId: updateProduct
+      parameters:
+        - name: id
+          in: path
+          description: Product ID to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existing product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      responses:
+        '200':
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '404':
+          description: Product not found
+    get:
+      tags:
+        - Products
+      summary: Get an existing product
+      description: Get an existing product
+      operationId: getProduct
+      parameters:
+        - name: id
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '404':
+          description: Product not found
+    delete:
+      tags:
+        - Products
+      summary: Delete a product
+      description: Delete a product
+      operationId: deleteProduct
+      parameters:
+        - name: id
+          in: path
+          description: Product ID to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deletion succeeded
+        '404':
+          description: Product not found
+components:
+  schemas:
+    ProductRequest:
+      type: object
+      required:
+        - name
+        - price
+      properties:
+        name:
+          type: string
+          example: [ "pizza", "burger", "spaghetti" ]
+        price:
+          type: number
+          format: double
+          example: 42
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ["c611d780541541f69c1e1e80b966527a"]
+        name:
+          type: string
+          example: [ "pizza", "burger", "spaghetti" ]
+        price:
+          type: number
+          format: double
+          example: 42
+        createdBy:
+          type: string
+          example: ["8b6469bbf2bb44c0aacc3ce43764e8d4"]
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-11-27T01:02:03Z'
+        updatedBy:
+          type: string
+          example: ["b95d5cd67a71450b853a188529b68a47"]
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-11-28T04:05:06Z'
+    ProductResponseList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProductResponse'
