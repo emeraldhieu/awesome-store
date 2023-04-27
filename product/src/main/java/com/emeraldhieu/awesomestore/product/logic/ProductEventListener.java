@@ -35,8 +35,9 @@ public class ProductEventListener {
         CompletableFuture<SendResult<String, ProductMessage>> future =
             kafkaTemplate.send(kafkaProperties.getTopic(), productMessage);
         future.whenComplete((result, throwable) -> {
-            log.info("Sent message=" + result.getProducerRecord().value() + " with offset=[" + result.getRecordMetadata().offset() + "]");
-            if (throwable != null) {
+            if (throwable == null) {
+                log.info("Sent message=" + result.getProducerRecord().value() + " with offset=[" + result.getRecordMetadata().offset() + "]");
+            } else {
                 log.info("Unable to send message=" + result.getProducerRecord().value() + " due to : " + throwable.getMessage());
             }
         });
