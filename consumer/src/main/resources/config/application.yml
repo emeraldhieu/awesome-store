@@ -35,4 +35,4 @@ application:
     topic: products
     partitions: 2
     replicationFactor: 1
-    groupId: payment
+    groupId: consumer
