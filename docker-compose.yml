@@ -65,7 +65,6 @@ services:
     depends_on:
       - zookeeper
       - kafka1
-#      - kafka2
     ports:
       - "8081:8081"
     environment:
@@ -79,7 +78,6 @@ services:
     hostname: control-center
     depends_on:
       - kafka1
-#      - kafka2
       - schema-registry
     ports:
       - "9021:9021"
