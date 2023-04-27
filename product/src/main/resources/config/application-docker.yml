@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${application.db.host}:${application.db.port}/${application.db.name}
+    username: ${application.db.user}
+    password: ${application.db.password}
+  jpa:
+    show-sql: true
+    database: postgresql
+  liquibase:
+    # Drop the existing to repopulate the whole database
+    # drop-first: true
+    # Used for development to update the changelogs continuously
+    clear-checksums: true
+  # Only "spring.kafka.bootstrap-servers" works.
+  # If "spring.kafka.producer.bootstrap-servers" was used, there would be an error "Connection to node -1 (localhost/127.0.0.1:9092) could not be established"
+  # It's worth to look into Kafka's autoconfiguration to see why.
+  kafka:
+    bootstrap-servers: "kafka1:29092"
+    properties:
+      schema.registry.url: http://schema-registry:8081
+logging:
+  level:
+    # Enable Liquibase logs for development
+    liquibase.database: DEBUG
+    liquibase.changelog: DEBUG
+    # Log to see liquibase's SQL
+    liquibase.executor.jvm.[JdbcExecutor$ExecuteStatementCallback]: DEBUG
+    # Log Kafka
+    org.springframework.kafka.listener: DEBUG
+    org.springframework.kafka.listener.adapter: INFO
+application:
+  db:
+    host: postgres
+    port: 5432
+    name: product
+    user: product
+    password: product
