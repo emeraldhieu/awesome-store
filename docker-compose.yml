@@ -90,6 +90,21 @@ services:
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
 
+  product:
+    build:
+      context: product
+      dockerfile: Dockerfile
+    image: product:1.0-SNAPSHOT
+    ports:
+      - 50001:8080
+
+  consumer:
+    build:
+      context: consumer
+      dockerfile: Dockerfile
+    image: consumer:1.0-SNAPSHOT
+    ports:
+      - 50002:8080
 
 volumes:
   postgres:
