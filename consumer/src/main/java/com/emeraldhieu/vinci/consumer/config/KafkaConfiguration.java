@@ -1,4 +1,4 @@
-package com.emeraldhieu.vinci.payment.config;
+package com.emeraldhieu.vinci.consumer.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
