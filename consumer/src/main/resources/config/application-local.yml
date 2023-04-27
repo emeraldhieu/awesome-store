@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    properties:
+      schema.registry.url: http://localhost:8081
+logging:
+  level:
+    # Log Kafka
+    org.springframework.kafka.listener: DEBUG
+    org.springframework.kafka.listener.adapter: INFO
+server:
+  port: 50002
