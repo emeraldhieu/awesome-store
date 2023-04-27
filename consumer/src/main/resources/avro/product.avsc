@@ -1,0 +1,12 @@
+{
+    "type": "record",
+    "name": "ProductMessage",
+    "namespace": "com.emeraldhieu.awesomestore.product",
+    "fields":
+    [
+        {
+            "name": "productId",
+            "type": "string"
+        }
+    ]
+}
