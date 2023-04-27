@@ -36,12 +36,13 @@ import java.util.stream.Collectors;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final MessageSource messageSource;
-    private final URI typeUri = URI.create("http://localhost:50001/awesome-store/types");
+    static final URI PROBLEM_TYPE_URI = URI.create("http://localhost:50001/awesome-store/types");
+    static final String FIELD_ERRORS = "fieldErrors";
 
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-        problemDetail.setType(typeUri);
+        problemDetail.setType(PROBLEM_TYPE_URI);
         problemDetail.setDetail(exception.getMessage());
         return new ResponseEntity<>(problemDetail, status);
     }
@@ -52,13 +53,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   WebRequest request) {
         BindingResult bindingResult = exception.getBindingResult();
         ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-        problemDetail.setType(typeUri);
+        problemDetail.setType(PROBLEM_TYPE_URI);
         problemDetail.setDetail(messageSource.getMessage("invalidRequestBodyArgument", null, null));
-        problemDetail.setProperty("fieldErrors", getFieldErrors(bindingResult.getFieldErrors()));
+        problemDetail.setProperty(FIELD_ERRORS, getFieldErrors(bindingResult.getFieldErrors()));
         return new ResponseEntity<>(problemDetail, status);
     }
 
-    private List<String> getFieldErrors(List<FieldError> fieldErrors) {
+    List<String> getFieldErrors(List<FieldError> fieldErrors) {
         return fieldErrors.stream()
             .map(fieldError -> {
                 String field = fieldError.getField();
@@ -69,9 +70,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidSortOrderException.class)
-    protected ResponseEntity<Object> handleNoHandlerFoundException() {
+    protected ResponseEntity<ProblemDetail> handleNoHandlerFoundException() {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
-        problemDetail.setType(typeUri);
+        problemDetail.setType(PROBLEM_TYPE_URI);
         problemDetail.setDetail(messageSource.getMessage("invalidSortOrder", null, null));
         return new ResponseEntity<>(problemDetail, HttpStatus.valueOf(problemDetail.getStatus()));
     }
@@ -81,7 +82,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers, HttpStatusCode status,
                                                                   WebRequest request) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-        problemDetail.setType(typeUri);
+        problemDetail.setType(PROBLEM_TYPE_URI);
         String detailMessage = getInvalidArgumentDetailMessage(exception);
         problemDetail.setDetail(detailMessage);
         return new ResponseEntity<>(problemDetail, status);
@@ -96,9 +97,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    protected ResponseEntity<Object> handleProductNotFound(ProductNotFoundException exception) {
+    protected ResponseEntity<ProblemDetail> handleProductNotFound(ProductNotFoundException exception) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
-        problemDetail.setType(typeUri);
+        problemDetail.setType(PROBLEM_TYPE_URI);
         problemDetail.setDetail(messageSource.getMessage("productNotFound", new Object[]{exception.getProductId()}, null));
         return new ResponseEntity<>(problemDetail, HttpStatus.valueOf(problemDetail.getStatus()));
     }
