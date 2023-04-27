@@ -194,7 +194,7 @@
 
                                     <!-- Add Lombok on top of the model class -->
                                     <additionalModelTypeAnnotations>
-                                        @lombok.Builder
+                                        @lombok.Builder(toBuilder = true)
                                         @lombok.Getter
                                         @lombok.extern.jackson.Jacksonized
                                         @lombok.EqualsAndHashCode
