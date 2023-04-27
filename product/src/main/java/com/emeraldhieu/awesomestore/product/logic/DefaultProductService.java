@@ -32,25 +32,25 @@ public class DefaultProductService implements ProductService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
-    public ProductResponse create(ProductRequest orderRequest) {
-        Product productToSave = productRequestMapper.toEntity(orderRequest);
+    public ProductResponse create(ProductRequest productRequest) {
+        Product productToSave = productRequestMapper.toEntity(productRequest);
         Product savedProduct = productRepository.save(productToSave);
         sendEvent(savedProduct);
         return productResponseMapper.toDto(savedProduct);
     }
 
-    public void sendEvent(Product product) {
+    private void sendEvent(Product product) {
         log.info("Sending %s...".formatted(ProductCreatedEvent.class.getSimpleName()));
         ProductCreatedEvent event = new ProductCreatedEvent(product.getExternalId());
         applicationEventPublisher.publishEvent(event);
     }
 
     @Override
-    public ProductResponse update(String id, ProductRequest orderRequest) {
+    public ProductResponse update(String id, ProductRequest productRequest) {
         Product productToUpdate = productRepository.findByExternalId(id)
-            .map(currentOrder -> {
-                productRequestMapper.partialUpdate(currentOrder, orderRequest);
-                return currentOrder;
+            .map(currentProduct -> {
+                productRequestMapper.partialUpdate(currentProduct, productRequest);
+                return currentProduct;
             })
             .orElseThrow(() -> new ProductNotFoundException(id));
         Product updatedProduct = productRepository.save(productToUpdate);
@@ -62,7 +62,14 @@ public class DefaultProductService implements ProductService {
     public Page<ProductResponse> list(int offset, int limit, List<String> sortOrders) {
         sortOrderValidator.validate(sortOrders);
 
-        List<Sort.Order> theSortOrders = sortOrders.stream()
+        List<Sort.Order> theSortOrders = getSortOrders(sortOrders);
+        Pageable pageable = PageRequest.of(offset, limit, Sort.by(theSortOrders));
+        return productRepository.findAll(pageable)
+            .map(productResponseMapper::toDto);
+    }
+
+    List<Sort.Order> getSortOrders(List<String> sortOrderStrs) {
+        return sortOrderStrs.stream()
             .map(sortOrderStr -> {
                 SortOrder sortOrder = SortOrder.from(sortOrderStr);
                 String propertyName = sortOrder.getPropertyName();
@@ -71,9 +78,6 @@ public class DefaultProductService implements ProductService {
                     .with(Sort.Direction.fromString(direction));
             })
             .collect(Collectors.toList());
-        Pageable pageable = PageRequest.of(offset, limit, Sort.by(theSortOrders));
-        return productRepository.findAll(pageable)
-            .map(productResponseMapper::toDto);
     }
 
     @Override
@@ -87,13 +91,6 @@ public class DefaultProductService implements ProductService {
     @Override
     public void delete(String id) {
         productRepository.findByExternalId(id)
-            .ifPresent(order -> productRepository.deleteByExternalId(id));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<ProductResponse> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Orders for query {}", query);
-        throw new UnsupportedOperationException("Not implemented yet.");
+            .ifPresent(product -> productRepository.deleteByExternalId(id));
     }
 }

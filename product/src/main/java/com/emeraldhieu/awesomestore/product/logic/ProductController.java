@@ -16,11 +16,12 @@ import java.util.stream.Collectors;
 public class ProductController implements ProductsApi {
 
     private final ProductService productService;
+    static final String PRODUCT_PATTERN = "/products/%s";
 
     @Override
     public ResponseEntity<ProductResponse> createProduct(ProductRequest productRequest) {
         ProductResponse createdProduct = productService.create(productRequest);
-        return ResponseEntity.created(URI.create(String.format("/products/%s", createdProduct.getId())))
+        return ResponseEntity.created(URI.create(String.format(PRODUCT_PATTERN, createdProduct.getId())))
             .body(createdProduct);
     }
 
