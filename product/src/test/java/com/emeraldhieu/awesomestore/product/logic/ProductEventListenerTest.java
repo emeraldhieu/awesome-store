@@ -44,8 +44,10 @@ class ProductEventListenerTest {
         when(kafkaProperties.getTopic()).thenReturn(topic);
 
         String externalId = "awesomeId";
+        double price = 42;
         ProductMessage productMessage = ProductMessage.newBuilder()
             .setProductId(externalId)
+            .setPrice(price)
             .build();
 
         ProducerRecord<String, ProductMessage> producerRecord = mock(ProducerRecord.class);
@@ -63,7 +65,7 @@ class ProductEventListenerTest {
         });
         when(kafkaTemplate.send(topic, productMessage)).thenReturn(future);
 
-        ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(externalId);
+        ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(externalId, price);
 
         initLogger();
 
@@ -88,8 +90,10 @@ class ProductEventListenerTest {
         when(kafkaProperties.getTopic()).thenReturn(topic);
 
         String externalId = "awesomeId";
+        double price = 42;
         ProductMessage productMessage = ProductMessage.newBuilder()
             .setProductId(externalId)
+            .setPrice(price)
             .build();
 
         ProducerRecord<String, ProductMessage> producerRecord = mock(ProducerRecord.class);
@@ -112,7 +116,7 @@ class ProductEventListenerTest {
 
         when(kafkaTemplate.send(topic, productMessage)).thenReturn(future);
 
-        ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(externalId);
+        ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(externalId, price);
 
         initLogger();
 

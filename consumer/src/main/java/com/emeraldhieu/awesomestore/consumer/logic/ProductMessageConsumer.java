@@ -1,7 +1,7 @@
-package com.emeraldhieu.vinci.consumer.logic;
+package com.emeraldhieu.awesomestore.consumer.logic;
 
 import com.emeraldhieu.awesomestore.product.ProductMessage;
-import com.emeraldhieu.vinci.consumer.config.KafkaProperties;
+import com.emeraldhieu.awesomestore.consumer.config.KafkaProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

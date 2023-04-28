@@ -41,7 +41,7 @@ public class DefaultProductService implements ProductService {
 
     private void sendEvent(Product product) {
         log.info("Sending %s...".formatted(ProductCreatedEvent.class.getSimpleName()));
-        ProductCreatedEvent event = new ProductCreatedEvent(product.getExternalId());
+        ProductCreatedEvent event = new ProductCreatedEvent(product.getExternalId(), product.getPrice());
         applicationEventPublisher.publishEvent(event);
     }
 

@@ -1,4 +1,4 @@
-package com.emeraldhieu.vinci.consumer.config;
+package com.emeraldhieu.awesomestore.consumer.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
