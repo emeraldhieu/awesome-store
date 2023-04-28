@@ -1,4 +1,4 @@
-package com.emeraldhieu.vinci.consumer.config;
+package com.emeraldhieu.awesomestore.consumer.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
