@@ -169,3 +169,7 @@ curl --location --request DELETE 'http://localhost:50001/products/a65944903bd94b
 ```
 
 Response status is 204 with no content
+
+## Resources
+
++ Postman collections: 
