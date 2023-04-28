@@ -8,15 +8,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       PGDATA: /data/postgres
-      POSTGRES_MULTIPLE_DATABASES: "product"
+      POSTGRES_DB: "product"
     ports:
       - "5432:5432"
     volumes:
       - postgres:/data/postgres
-      # Create multiple databases with users upon starting
-      # See https://github.com/mrts/docker-postgresql-multiple-databases#using-multiple-databases-with-the-official-postgresql-docker-image
-      # Remember to grant execution to your script: "chmod +x <yourScript>"
-      - ./postgres-scripts:/docker-entrypoint-initdb.d
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.1.1
