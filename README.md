@@ -5,7 +5,7 @@ A store that sells a variety of amazing products. What it does:
 + Manage products via REST API
 + Notify other consumer services of newly created products via Kafka
 
-![](images/idea.png)
+![](images/systemDesign.png)
 (The diagram shows a desired system design where Kafka consumers are different services. Extra services such as Zookeeper are opted out for clarity.)
 
 ## Quickstart
