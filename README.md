@@ -118,6 +118,10 @@ As Product's Kafka messages tend to evolve by development's needs, [Confluent Av
 
 [Liquibase](https://docs.liquibase.com/tools-integrations/springboot/springboot.html) supports revisioning, deploying and rolling back database changes. On top of that, it allows [initializing data from CSV](https://docs.liquibase.com/change-types/load-data.html) for demonstrative purpose.
 
+## Java beans mappings
+
+Like Lombok, [Mapstruct](https://github.com/mapstruct/mapstruct) is a code generator library that supports mapping between entities and DTOs without writing boilerplate code. A significant benefit is that mappers don't need unit tests because there's no code to test!
+
 ## Product API
 
 ### 1) List products
