@@ -70,7 +70,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidSortOrderException.class)
-    protected ResponseEntity<ProblemDetail> handleNoHandlerFoundException() {
+    protected ResponseEntity<ProblemDetail> handleInvalidSortOrder() {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
         problemDetail.setType(PROBLEM_TYPE_URI);
         problemDetail.setDetail(messageSource.getMessage("invalidSortOrder", null, null));
