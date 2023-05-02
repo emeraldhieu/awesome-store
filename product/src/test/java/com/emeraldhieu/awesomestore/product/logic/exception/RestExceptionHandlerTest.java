@@ -30,13 +30,13 @@ class RestExceptionHandlerTest {
     }
 
     @Test
-    void givenMessageSource_whenHandleNoHandlerFoundException_thenReturnResponseEntity() {
+    void givenMessageSource_whenHandleInvalidSortOrderException_thenReturnResponseEntity() {
         // GIVEN
         String expectedErrorMessage = "anything";
         when(messageSource.getMessage("invalidSortOrder", null, null)).thenReturn(expectedErrorMessage);
 
         // WHEN
-        ResponseEntity<ProblemDetail> responseEntity = restExceptionHandler.handleNoHandlerFoundException();
+        ResponseEntity<ProblemDetail> responseEntity = restExceptionHandler.handleInvalidSortOrder();
 
         // THEN
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());

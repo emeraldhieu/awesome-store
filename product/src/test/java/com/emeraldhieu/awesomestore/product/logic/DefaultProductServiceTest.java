@@ -125,7 +125,7 @@ class DefaultProductServiceTest {
     }
 
     @Test
-    void givenOfffsetLimitAndSortOrders_whenList_thenReturnAListOfProductResponses() {
+    void givenOffsetLimitAndSortOrders_whenList_thenReturnAListOfProductResponses() {
         // GIVEN
         int offset = 0;
         int limit = 42;
