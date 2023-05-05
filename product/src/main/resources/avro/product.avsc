@@ -5,7 +5,11 @@
     "fields":
     [
         {
-            "name": "productId",
+            "name": "id",
+            "type": "string"
+        },
+        {
+            "name": "name",
             "type": "string"
         },
         {

@@ -34,5 +34,6 @@ application:
   kafka:
     topic: products
     partitions: 2
+    # In production, this config should be equal to the number of Kafka brokers.
     replicationFactor: 1
     groupId: consumer
