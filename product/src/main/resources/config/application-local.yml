@@ -7,8 +7,9 @@ spring:
     show-sql: true
     database: postgresql
   liquibase:
-    # Drop the existing to repopulate the whole database
-#    drop-first: true
+    # Drop the existing to repopulate the whole database;
+    # USED FOR TESTING ONLY!!!
+    drop-first: true
     # Used for development to update the changelogs continuously
     clear-checksums: true
   kafka:
