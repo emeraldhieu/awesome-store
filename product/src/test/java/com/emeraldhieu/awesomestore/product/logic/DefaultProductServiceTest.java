@@ -52,9 +52,11 @@ class DefaultProductServiceTest {
         Product productToSave = Product.builder()
             .build();
         String externalId = "amazingExternalId";
+        String name = "pizza";
         double price = 42;
         Product savedProduct = Product.builder()
             .price(price)
+            .name(name)
             .externalId(externalId)
             .build();
 
@@ -70,7 +72,11 @@ class DefaultProductServiceTest {
         ProductResponse productResponse = defaultProductService.create(productRequest);
 
         // THEN
-        ProductCreatedEvent event = new ProductCreatedEvent(externalId, price);
+        ProductCreatedEvent event = ProductCreatedEvent.builder()
+            .id(externalId)
+            .name(name)
+            .price(price)
+            .build();
         verify(applicationEventPublisher, times(1)).publishEvent(event);
         assertEquals(expectedProductResponse, productResponse);
     }

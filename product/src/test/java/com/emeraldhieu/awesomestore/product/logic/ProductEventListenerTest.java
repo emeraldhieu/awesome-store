@@ -44,9 +44,11 @@ class ProductEventListenerTest {
         when(kafkaProperties.getTopic()).thenReturn(topic);
 
         String externalId = "awesomeId";
+        String name = "pizza";
         double price = 42;
         ProductMessage productMessage = ProductMessage.newBuilder()
-            .setProductId(externalId)
+            .setId(externalId)
+            .setName(name)
             .setPrice(price)
             .build();
 
@@ -65,7 +67,11 @@ class ProductEventListenerTest {
         });
         when(kafkaTemplate.send(topic, productMessage)).thenReturn(future);
 
-        ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(externalId, price);
+        ProductCreatedEvent productCreatedEvent = ProductCreatedEvent.builder()
+            .id(externalId)
+            .name(name)
+            .price(price)
+            .build();
 
         initLogger();
 
@@ -90,9 +96,11 @@ class ProductEventListenerTest {
         when(kafkaProperties.getTopic()).thenReturn(topic);
 
         String externalId = "awesomeId";
+        String name = "pizza";
         double price = 42;
         ProductMessage productMessage = ProductMessage.newBuilder()
-            .setProductId(externalId)
+            .setId(externalId)
+            .setName(name)
             .setPrice(price)
             .build();
 
@@ -105,18 +113,17 @@ class ProductEventListenerTest {
 
         String errorMessage = "Something wrong";
         CompletableFuture<SendResult<String, ProductMessage>> future = CompletableFuture.supplyAsync(() -> {
-            /*
-            SendResult sendResult = mock(SendResult.class);
-            when(sendResult.getProducerRecord()).thenReturn(producerRecord);
-            when(sendResult.getRecordMetadata()).thenReturn(recordMetadata);
-            return sendResult;
-             */
             throw new IllegalArgumentException(errorMessage);
         });
 
         when(kafkaTemplate.send(topic, productMessage)).thenReturn(future);
 
-        ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(externalId, price);
+        ProductCreatedEvent productCreatedEvent = ProductCreatedEvent.builder()
+            .id(externalId)
+            .name(name)
+            .price(price)
+            .build();
+        // new ProductCreatedEvent(externalId, price);
 
         initLogger();
 
@@ -146,5 +153,4 @@ class ProductEventListenerTest {
         listAppender.start();
         fooLogger.addAppender(listAppender);
     }
-
 }

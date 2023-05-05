@@ -59,7 +59,7 @@ public class KafkaProducerConfiguration {
      * Create a topic if not existed.
      */
     @Bean
-    public NewTopic orderTopic() {
+    public NewTopic createTopic() {
         return new NewTopic(kafkaProperties.getTopic(),
             kafkaProperties.getPartitions(),
             (short) kafkaProperties.getReplicationFactor());

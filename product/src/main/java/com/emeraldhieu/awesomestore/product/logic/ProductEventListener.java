@@ -30,8 +30,9 @@ public class ProductEventListener {
     @EventListener
     public void handleProductCreated(ProductCreatedEvent event) {
         ProductMessage productMessage = ProductMessage.newBuilder()
-            .setProductId(event.externalId())
-            .setPrice(event.price())
+            .setId(event.getId())
+            .setName(event.getName())
+            .setPrice(event.getPrice())
             .build();
         CompletableFuture<SendResult<String, ProductMessage>> future =
             kafkaTemplate.send(kafkaProperties.getTopic(), productMessage);
