@@ -97,6 +97,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      kafka1:
+        condition: service_started
     networks:
       - backend
 
@@ -110,6 +112,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      kafka1:
+        condition: service_started
     networks:
       - backend
 
