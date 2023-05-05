@@ -4,11 +4,6 @@ services:
   postgres:
     image: postgres:15.1-alpine
     hostname: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      PGDATA: /data/postgres
-      POSTGRES_MULTIPLE_DATABASES: "product"
     ports:
       - "5432:5432"
     volumes:
@@ -17,6 +12,19 @@ services:
       # See https://github.com/mrts/docker-postgresql-multiple-databases#using-multiple-databases-with-the-official-postgresql-docker-image
       # Remember to grant execution to your script: "chmod +x <yourScript>"
       - ./postgres-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - backend
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+      POSTGRES_MULTIPLE_DATABASES: "product"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.1.1
@@ -28,6 +36,8 @@ services:
     volumes:
       - zookeeper-data:/var/lib/zookeeper/data
       - zookeeper-transaction-logs:/var/lib/zookeeper/log
+    networks:
+      - backend
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 1
@@ -42,6 +52,10 @@ services:
       - "9092:9092"
     volumes:
       - kafka1-data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper
+    networks:
+      - backend
     environment:
       KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka1:29092,OUTSIDE://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
@@ -56,17 +70,17 @@ services:
       KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
       KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
-    depends_on:
-      - zookeeper
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.3.0
     hostname: schema-registry
+    ports:
+      - "8081:8081"
     depends_on:
       - zookeeper
       - kafka1
-    ports:
-      - "8081:8081"
+    networks:
+      - backend
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka1:29092,kafka2:29093"
@@ -80,6 +94,11 @@ services:
     image: product:1.0-SNAPSHOT
     ports:
       - 50001:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - backend
 
   consumer:
     build:
@@ -88,6 +107,15 @@ services:
     image: consumer:1.0-SNAPSHOT
     ports:
       - 50002:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
 
 volumes:
   postgres:
