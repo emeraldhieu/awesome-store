@@ -65,7 +65,7 @@ docker logs -f awesome-store-consumer-1
 
 The log should contain
 ```shell
-Received message in group 'consumer': {"productId": "a2dc29c5e0d54b5f8651e4c602a77b77", "price": 42.0}
+Received message in group 'consumer': {"id": "a2dc29c5e0d54b5f8651e4c602a77b77", "name": "pasta", "price": 42.0}
 ```
 
 ## API-first approach
@@ -103,7 +103,11 @@ As Product's Kafka messages tend to evolve by development's needs, [Confluent Av
     "fields":
     [
         {
-            "name": "productId",
+            "name": "id",
+            "type": "string"
+        },
+        {
+            "name": "name",
             "type": "string"
         },
         {
