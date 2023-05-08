@@ -1,13 +1,13 @@
 openapi: 3.0.3
 info:
   title: Product - OpenAPI 3.0
-  description: Product API that manages shopping products.
+  description: A REST API that manages amazing products.
   version: 1.0.11
 servers:
   - url: http://localhost:50001
 tags:
   - name: Products
-    description: Everything about product
+    description: Everything about products
 paths:
   /products:
     get:
@@ -142,7 +142,7 @@ components:
       properties:
         name:
           type: string
-          example: [ "pizza", "burger", "spaghetti" ]
+          example: "pizza"
         price:
           type: number
           format: double
@@ -152,24 +152,24 @@ components:
       properties:
         id:
           type: string
-          example: ["c611d780541541f69c1e1e80b966527a"]
+          example: "c611d780541541f69c1e1e80b966527a"
         name:
           type: string
-          example: [ "pizza", "burger", "spaghetti" ]
+          example: "pizza"
         price:
           type: number
           format: double
           example: 42
         createdBy:
           type: string
-          example: ["8b6469bbf2bb44c0aacc3ce43764e8d4"]
+          example: "8b6469bbf2bb44c0aacc3ce43764e8d4"
         createdAt:
           type: string
           format: date-time
           example: '2022-11-27T01:02:03Z'
         updatedBy:
           type: string
-          example: ["b95d5cd67a71450b853a188529b68a47"]
+          example: "b95d5cd67a71450b853a188529b68a47"
         updatedAt:
           type: string
           format: date-time
