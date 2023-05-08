@@ -32,6 +32,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
+/**
+ * Trigger the capturing of auditing information.
+ * See https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.auditing.configuration
+ */
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -76,20 +80,6 @@ public class Product {
     void preInsert() {
         if (externalId == null) {
             externalId = UUID.randomUUID().toString().replace("-", "");
-        }
-        if (createdBy == null) {
-            // TODO Set this value to the user who creates the order.
-            createdBy = UUID.randomUUID().toString().replace("-", "");
-        }
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-        if (updatedBy == null) {
-            // TODO Set this value to the user who updates the order.
-            updatedBy = UUID.randomUUID().toString().replace("-", "");
-        }
-        if (updatedAt == null) {
-            updatedAt = LocalDateTime.now();
         }
     }
 }
