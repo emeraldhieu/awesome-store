@@ -25,14 +25,17 @@ public class KafkaProducerConfiguration {
     private final KafkaProperties kafkaProperties;
 
     /**
-     * Try customizing autoconfigured {@link DefaultKafkaProducerFactory},
-     * meaning configuring producer using Java code.
+     * Customize the autoconfigured {@link DefaultKafkaProducerFactory} using Java code.
      */
     @Bean
     public DefaultKafkaProducerFactoryCustomizer defaultKafkaProducerFactoryCustomizer() {
         return producerFactory -> {
             Map<String, Object> additionalConfigs = Map.of(
-                ProducerConfig.RETRIES_CONFIG, 5
+                /**
+                 * Increase the "upper bound on the time to report success or failure after a call to send() returns".
+                 * See https://kafka.apache.org/documentation/#producerconfigs_delivery.timeout.ms
+                 */
+                ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, 180000
             );
             producerFactory.updateConfigs(additionalConfigs);
         };
