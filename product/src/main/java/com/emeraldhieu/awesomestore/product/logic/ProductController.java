@@ -10,6 +10,13 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A controller that implements an Open API contract.
+ * Advantages:
+ * + Readability: Everyone can understand, update, and review it
+ * + Interaction: You can see and use the mock API using a tool like Swagger UI
+ * + Widely adopted: Supported by libraries such as code generator
+ */
 @Validated
 @RestController
 @RequiredArgsConstructor

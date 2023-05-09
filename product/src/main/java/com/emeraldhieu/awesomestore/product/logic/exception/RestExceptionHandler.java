@@ -36,7 +36,10 @@ import java.util.stream.Collectors;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final MessageSource messageSource;
+    
+    // TODO Get the host dynamically
     static final URI PROBLEM_TYPE_URI = URI.create("http://localhost:50001/awesome-store/types");
+
     static final String FIELD_ERRORS = "fieldErrors";
 
     @Override

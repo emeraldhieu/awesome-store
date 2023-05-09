@@ -15,8 +15,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -28,10 +26,13 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "product")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
 @Setter
 @EqualsAndHashCode
+/**
+ * Trigger the capturing of auditing information.
+ * See https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.auditing.configuration
+ */
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -76,20 +77,6 @@ public class Product {
     void preInsert() {
         if (externalId == null) {
             externalId = UUID.randomUUID().toString().replace("-", "");
-        }
-        if (createdBy == null) {
-            // TODO Set this value to the user who creates the order.
-            createdBy = UUID.randomUUID().toString().replace("-", "");
-        }
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-        if (updatedBy == null) {
-            // TODO Set this value to the user who updates the order.
-            updatedBy = UUID.randomUUID().toString().replace("-", "");
-        }
-        if (updatedAt == null) {
-            updatedAt = LocalDateTime.now();
         }
     }
 }
